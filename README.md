@@ -58,7 +58,7 @@ That's it. No build configuration. No waiting. Open `http://localhost:3000` to s
 
 ## 📖 Documentation
 
-Ready to dive deeper? Check out our official documentation at [inertjs.dev/documentation](https://inertjs.org/documentation).
+Ready to dive deeper? Check out our official documentation at [inertjs.org/documentation](https://inertjs.org/documentation).
 
 ## 🤝 Contributing
 
