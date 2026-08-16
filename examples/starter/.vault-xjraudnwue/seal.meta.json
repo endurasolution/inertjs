@@ -1,0 +1,10 @@
+{
+  "v": 2,
+  "kdf": "scrypt",
+  "salt": "kfB0Jm3NzyULnxy+L7dRhg==",
+  "nonce": "3PsD0DmeygfyvdZM",
+  "alg": "aes-256-gcm",
+  "createdAt": "2026-08-15T15:25:55.126Z",
+  "keyRef": "14f55900-44b5-4a84-8c5b-e737d0f49e2d",
+  "chain": "45efbb4ddc1edc77a63a440318c513c0b611bfa40e03fdee03881dc9d332c279"
+}

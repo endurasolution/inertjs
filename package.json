@@ -1,0 +1,15 @@
+{
+  "name": "inertjs-monorepo",
+  "version": "1.0.0-beta.6",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test packages/*/test/*.test.js"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}

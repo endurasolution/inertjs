@@ -1,0 +1,16 @@
+{
+  "name": "inertjs-vector",
+  "version": "1.0.0-beta.6",
+  "type": "module",
+  "main": "src/index.js",
+  "dependencies": {
+    "inertjs-optimizer": "^1.0.0-beta.6"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./*": "./*"
+  }
+}

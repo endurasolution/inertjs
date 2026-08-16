@@ -1,0 +1,14 @@
+{
+  "name": "inertjs-pulse",
+  "version": "1.0.0-beta.6",
+  "type": "module",
+  "main": "src/index.js",
+  "dependencies": {},
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./*": "./*"
+  }
+}

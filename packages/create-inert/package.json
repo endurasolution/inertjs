@@ -1,0 +1,26 @@
+{
+  "name": "create-inert",
+  "version": "1.0.0-beta.6",
+  "description": "Create a new InertJS application",
+  "type": "module",
+  "bin": {
+    "create-inert": "./bin/create-inert.js"
+  },
+  "scripts": {
+    "start": "node ./bin/create-inert.js"
+  },
+  "keywords": [
+    "inertjs",
+    "create",
+    "init",
+    "starter"
+  ],
+  "author": "InertJS Team",
+  "license": "MIT",
+  "dependencies": {},
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./*": "./*"
+  }
+}

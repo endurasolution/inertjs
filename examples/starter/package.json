@@ -1,0 +1,14 @@
+{
+  "name": "starter",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "inert dev"
+  },
+  "dependencies": {
+    "inertjs-cli": "^1.0.0-beta.6",
+    "inertjs-vector": "^1.0.0-beta.6",
+    "inertjs-vault": "^1.0.0-beta.6",
+    "inertjs-shield": "^1.0.0-beta.6"
+  }
+}
