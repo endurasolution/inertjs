@@ -6,7 +6,7 @@
   <p>
     <a href="https://www.npmjs.com/package/create-inert"><img src="https://img.shields.io/npm/v/create-inert?style=flat-square&color=cyan" alt="NPM Version"></a>
     <a href="https://github.com/endurasolution/inertjs/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/create-inert?style=flat-square&color=blue" alt="License"></a>
-    <a href="https://inertjs.org"><img src="https://img.shields.io/badge/docs-inertjs.dev-cyan?style=flat-square" alt="Documentation"></a>
+    <a href="https://inertjs.org"><img src="https://img.shields.io/badge/docs-inertjs.org-cyan?style=flat-square" alt="Documentation"></a>
   </p>
 </div>
 
