@@ -1,12 +1,12 @@
 <div align="center">
-  <img src="homepage/public/logo.png" alt="InertJS Logo" width="300" />
+  <img src="https://github.com/user-attachments/assets/2f6f4af9-cce8-40a6-bc46-e1bd19175d67" alt="InertJS Logo" width="300" />
   <h1>InertJS Framework</h1>
   <p><strong>The Lightning Fast, Zero-Build-Step Web Framework for Node.js</strong></p>
 
   <p>
     <a href="https://www.npmjs.com/package/create-inert"><img src="https://img.shields.io/npm/v/create-inert?style=flat-square&color=cyan" alt="NPM Version"></a>
     <a href="https://github.com/endurasolution/inertjs/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/create-inert?style=flat-square&color=blue" alt="License"></a>
-    <a href="https://inertjs.dev"><img src="https://img.shields.io/badge/docs-inertjs.dev-cyan?style=flat-square" alt="Documentation"></a>
+    <a href="https://inertjs.org"><img src="https://img.shields.io/badge/docs-inertjs.dev-cyan?style=flat-square" alt="Documentation"></a>
   </p>
 </div>
 
@@ -58,7 +58,7 @@ That's it. No build configuration. No waiting. Open `http://localhost:3000` to s
 
 ## 📖 Documentation
 
-Ready to dive deeper? Check out our official documentation at [inertjs.dev/documentation](https://inertjs.dev/documentation).
+Ready to dive deeper? Check out our official documentation at [inertjs.dev/documentation](https://inertjs.org/documentation).
 
 ## 🤝 Contributing
 
