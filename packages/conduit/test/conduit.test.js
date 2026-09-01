@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert';
 import http from 'node:http';
-import { fetchSecure } from '../src/index.js';
+import { fetchSecure, closeConduit } from '../src/index.js';
 
 test('Conduit secure fetch subsystem', async (t) => {
   // Create a local HTTP server to test against
@@ -26,7 +26,12 @@ test('Conduit secure fetch subsystem', async (t) => {
     
     const data = await res.json();
     assert.deepStrictEqual(data, { message: 'Hello from Conduit' });
+
+    // The worker pool is reusable across calls.
+    const again = await fetchSecure(`http://127.0.0.1:${port}/again`);
+    assert.strictEqual(again.status, 200);
   } finally {
-    server.close();
+    await closeConduit();
+    await new Promise(resolve => server.close(resolve));
   }
 });
