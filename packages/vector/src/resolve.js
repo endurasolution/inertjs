@@ -13,6 +13,24 @@ export async function resolveToString(val, ctx = 'text', attrName = '') {
     return resolveToString(await val, ctx, attrName);
   }
 
+  if (val && val.type === 'VecFragment') {
+    let source = val.source;
+    try {
+      if (typeof source === 'function') source = source();
+      return await resolveToString(await source, ctx, attrName);
+    } catch (err) {
+      console.error('[InertJS] Deferred fragment rejected during buffered render:', err);
+      let content = val.error;
+      if (typeof content === 'function') {
+        try { content = content(err); } catch { content = null; }
+      }
+      if (content == null) return '';
+      if (content instanceof RawString) return content.value;
+      if (content && content.type === 'VecStream') return resolveToString(content, ctx, attrName);
+      return String(content);
+    }
+  }
+
   if (Array.isArray(val)) {
     let res = '';
     for (const item of val) {

@@ -1,5 +1,4 @@
 import http from 'node:http';
-import http2 from 'node:http2';
 import crypto from 'node:crypto';
 import { requestScope } from './scope.js';
 import { handleRequest } from './pipeline.js';
@@ -88,18 +87,24 @@ export class CoreServer {
 
   async stop() {
     return new Promise((resolve, reject) => {
-      let timeout;
-      if (this.config.core.gracefulShutdownMs) {
-        timeout = setTimeout(() => {
-          console.warn('[InertJS] Graceful shutdown timeout, forcing close');
-          for (const conn of this.connections) {
-            conn.destroy();
-          }
-        }, this.config.core.gracefulShutdownMs);
-      }
+      // Always force idle/keep-alive sockets closed after a grace period — an
+      // unset gracefulShutdownMs must not mean "wait forever".
+      const graceMs = this.config.core?.gracefulShutdownMs ?? 5000;
+      const timeout = setTimeout(() => {
+        if (this.connections.size) {
+          console.warn(`[InertJS] Graceful shutdown timeout, forcing ${this.connections.size} connection(s) closed`);
+        }
+        for (const conn of this.connections) {
+          conn.destroy();
+        }
+      }, graceMs);
+      timeout.unref?.();
+
+      // Stop keep-alive from holding sockets open past the last response.
+      this.server.closeIdleConnections?.();
 
       this.server.close((err) => {
-        if (timeout) clearTimeout(timeout);
+        clearTimeout(timeout);
         if (err) reject(err);
         else resolve();
       });

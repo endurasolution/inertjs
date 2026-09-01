@@ -1,11 +1,11 @@
 {
   "name": "inertjs-core",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0-beta.8",
   "type": "module",
   "main": "src/index.js",
   "dependencies": {
     "inertjs-optimizer": "^1.0.0-beta.6",
-    "inertjs-vector": "^1.0.0-beta.6",
+    "inertjs-vector": "^1.0.0-beta.8",
     "inertjs-shield": "^1.0.0-beta.6",
     "inertjs-router": "^1.0.0-beta.6"
   },
