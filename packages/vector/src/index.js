@@ -1,6 +1,10 @@
 import { analyzeTemplateStrings, escape, CONTEXT } from './escaper.js';
 import { minifyHTML } from 'inertjs-optimizer';
 export { resolveToString } from './resolve.js';
+export { renderToStream, DeferTimeoutError } from './stream.js';
+// NOTE: index <-> stream is a cycle (stream imports RawString from here). Both
+// only touch each other's bindings at call time, by which point ESM has finished
+// initialising both modules, so the re-export above is safe.
 
 const planCache = new WeakMap();
 
@@ -44,13 +48,17 @@ export function raw(str, suppressWarning = false) {
  * `fallback` / `error` content is treated as trusted HTML (like `raw()`), so
  * interpolate untrusted values through `vec\`\`` before handing them in.
  *
- * @param {Promise<any>|AsyncIterable<any>|object|(() => any)} source
- *   The deferred value, or a factory that produces it (called lazily; a throw
- *   from the factory is caught and routed to `error`).
+ * @param {Promise<any>|AsyncIterable<any>|object|((ctx: { signal: AbortSignal }) => any)} source
+ *   The deferred value, or a factory that produces it (called lazily with an
+ *   `{ signal }` that aborts when the response is torn down; a throw from the
+ *   factory is caught and routed to `error`).
  * @param {object} [options]
  * @param {string|RawString} [options.fallback] Skeleton shown while pending.
  * @param {string|RawString|object|((err: Error) => string|RawString|object)} [options.error]
- *   Content to patch in if `source` rejects. A function receives the error.
+ *   Content to patch in if `source` rejects or times out. A function receives the error.
+ * @param {number} [options.timeout]
+ *   Milliseconds to wait before failing the fragment with a `DeferTimeoutError`
+ *   (routed to `error` / `onError` like any other rejection).
  * @returns {DeferredFragment}
  */
 export function defer(source, options = {}) {
@@ -64,6 +72,7 @@ export class DeferredFragment {
     this.source = source;
     this.fallback = options.fallback ?? null;
     this.error = options.error ?? null;
+    this.timeout = options.timeout ?? null;
   }
 }
 

@@ -252,9 +252,11 @@ export async function handleRequest(req, res, config, trie) {
 
     let viewResult = '';
     let isFlashMode = false;
+    let onFragmentError = null;
     if (route.view) {
       const viewModule = await import(pathToFileURL(route.view).href);
       if (viewModule.flash === true) isFlashMode = true;
+      if (typeof viewModule.onFragmentError === 'function') onFragmentError = viewModule.onFragmentError;
       if (viewModule.render) {
         viewResult = viewModule.render({ data, params, scope });
       }
@@ -304,9 +306,38 @@ export async function handleRequest(req, res, config, trie) {
       return;
     }
 
-    const webStream = renderToStream(finalResult, scope.nonce);
+    // Abort in-flight streaming work if the client disconnects mid-response.
+    const streamAbort = new AbortController();
+    res.on('close', () => {
+      if (!res.writableEnded) streamAbort.abort();
+    });
+
+    const webStream = renderToStream(finalResult, scope.nonce, {
+      signal: streamAbort.signal,
+      onError: (fragErr, info) => {
+        if (onFragmentError) {
+          try {
+            onFragmentError(fragErr, { ...info, req, params, scope });
+          } catch (hookErr) {
+            console.error(`[InertJS] onFragmentError hook threw on ${url.pathname}:`, hookErr);
+          }
+        }
+      }
+    });
     const nodeStream = Readable.fromWeb(webStream);
-    
+
+    // A stream-level error can only happen before the shell is flushed; after
+    // that fragments fail in isolation. Never leave it unhandled (would crash).
+    nodeStream.on('error', (streamErr) => {
+      console.error(`[InertJS] Render stream error on ${url.pathname}:`, streamErr);
+      if (!res.headersSent) {
+        res.writeHead(500, { 'Content-Type': 'text/plain' });
+        res.end('Internal Server Error');
+      } else {
+        res.destroy(streamErr);
+      }
+    });
+
     // Pipe handles backpressure natively
     nodeStream.pipe(res);
 
@@ -358,6 +389,10 @@ export async function handleRequest(req, res, config, trie) {
           
           const webStream = renderToStream(finalResult, scope.nonce);
           const nodeStream = Readable.fromWeb(webStream);
+          nodeStream.on('error', (streamErr) => {
+            console.error(`[InertJS] 500 render stream error:`, streamErr);
+            res.destroy(streamErr);
+          });
           nodeStream.pipe(res);
           return;
         } catch (globalErr) {
