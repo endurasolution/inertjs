@@ -33,6 +33,22 @@ publish propagates to dependents.
   the response's `AbortController` fires on client disconnect and is handed to
   `renderToStream`; and the Node stream now has an `error` listener so a
   pre-flush render failure can no longer crash the process.
+- **`server.stop()` no longer hangs forever** when `core.gracefulShutdownMs` is
+  unset — it defaults to 5s, calls `server.closeIdleConnections()` so keep-alive
+  clients release promptly, and always force-closes lingering sockets.
+- Dropped an unused `http2` import.
+
+### `inertjs-conduit`
+
+- The background fetch worker is `unref`'d while idle, so it can no longer keep a
+  process (or a test runner) alive on its own; it is `ref`'d only around an
+  in-flight request. New `closeConduit()` for deterministic teardown.
+
+### Tests
+
+- Repaired the `inertjs-core` and `inertjs-conduit` suites, both of which were
+  non-functional since the initial commit (an `http2` client against the
+  HTTP/1.1 server; a worker that kept `node --test` hanging).
 
 ## 1.0.0-beta.7
 
